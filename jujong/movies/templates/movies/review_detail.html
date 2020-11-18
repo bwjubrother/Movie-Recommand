@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block content %}
+<div class ="container">
+    <div class= "row">
+        <div class = "col-8 text-white" style="font-family: 'Gamja Flower', cursive; font-size: 22px;">
+            <h2>{{ review.user }}의 리뷰</h2>
+            <hr>
+            <h2>제목 : {{ review.title }}</h2>
+            <hr >
+            <p>내용 : {{ review.content }}</p>
+            <hr>
+            {% if request.user == review.user %}
+                <a href="{% url 'movies:review_update' movie.pk review.pk %}">수정</a>
+                <a href="{% url 'movies:review_delete' movie.pk review.pk %}">삭제</a>
+            {% endif %}
+            <a href="{% url 'movies:detail' movie.pk %}">돌아가기</a>
+        </div>
+        <div class = "col-4">
+            <img src="{{movie.poster_path}}"  style="width:250px; height:300px;">
+        </div>
+    </div>
+    <div class = "text-white" style="font-family: 'Gamja Flower', cursive; font-size: 22px;">
+        <hr>
+        <h3>댓글목록</h3>
+        {% for comment in comments %}
+            <hr>
+            <p>{{ comment.user }}: {{ comment.content }} | {{ comment.created_at }}</p>
+            {% if request.user == comment.user %}
+            <form action="{% url 'movies:comment_delete' movie.pk review.pk comment.pk %}" method="POST">
+                {% csrf_token %}
+                <button>댓글 삭제</button>
+            </form>
+            {% endif %}
+        {% endfor %}
+        <form action="{% url 'movies:comment_create' movie.pk review.pk %}" method="POST">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <button class="btn btn-primary">댓글 작성</button>
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}

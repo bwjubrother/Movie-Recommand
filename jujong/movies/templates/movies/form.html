@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% load bootstrap4 %}
+{% block content %}
+    <form action="" method ="POST" class="text-white">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button>입력</button>
+    </form>
+
+{% endblock %}

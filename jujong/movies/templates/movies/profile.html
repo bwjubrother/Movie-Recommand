@@ -1,0 +1,35 @@
+{% extends 'base.html'%}
+{% load bootstrap4 %}
+{% load static %}
+
+
+{% block content %}
+<div style="font-family: 'Gamja Flower', cursive;">
+    <h1 class = "text-white">{{ user }}님의 히스토리</h1>
+    <hr>
+    <h2></h2>
+    <div class ="row">
+        <div class="card-deck ">
+
+            {% for movie, rate in my_rates_list %}
+            <div class="col-3">
+                <div class="card">
+                    <a href="{% url 'movies:detail' movie.id %}">
+                        <img src="{{ movie.poster_path }}" class="card-img-top" alt="...">
+                    </a>
+                    <div class="card-body " style="padding-bottom: 0px; background-color: powderblue;">
+                        <p class=" d-flex card-title justify-content-between" style="font-size: 25px;"> <span>{{ movie.title |truncatechars:10 }}</span> <span>{{ rate }} 점</span> </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}

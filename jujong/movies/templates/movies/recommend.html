@@ -1,0 +1,115 @@
+{% extends 'base.html'%}
+{% load bootstrap4 %}
+{% load static %}
+
+
+{% block content %}
+
+
+<h1 class="text-white" style="font-family: 'Gamja Flower', cursive;">같은 장르의 이런 영화 어떠세요?</h1>
+<div>
+  <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
+    <div class="carousel-inner" role="listbox">
+      <div class="carousel-item active">
+        <div class ="row">
+          {% for movie in like_movies1 %}
+          <div class="col-md-3">
+            <a href="{% url 'movies:detail' movie.id %}">
+            <img src="{{ movie.poster_path }}" class="d-block w-100 h-100" alt="poster">
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class ="row">
+          {% for movie in like_movies2 %}
+          <div class="col-md-3">
+            <a href="{% url 'movies:detail' movie.id %}">
+              <img src="{{ movie.poster_path }}" class="d-block w-100 h-100" alt="poster">
+            </a>
+          </div>
+        {% endfor%}
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class ="row">
+          {% for movie in like_movies3 %}
+          <div class="col-md-3">
+            <a href="{% url 'movies:detail' movie.id %}">
+              <img src="{{ movie.poster_path }}" class="d-block w-100 h-100" alt="poster">
+            </a>
+          </div>
+        {% endfor%}
+        </div>
+      </div>
+    </div>
+
+    <a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleFade" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+</div>
+
+<hr>
+
+<h1 class="text-white" style="font-family: 'Gamja Flower', cursive;">{{ request.user}} 님께 추천 드리는 영화</h1>
+<div>
+  <div id="r_carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
+    <div class="carousel-inner" role="listbox">
+      <div class="carousel-item active">
+        <div class ="row">
+          {% for movie in rec_movies1 %}
+          <div class="col-md-3">
+            <a href="{% url 'movies:detail' movie.id %}">
+              <img src="{{ movie.poster_path }}" class="d-block w-100 h-100" alt="poster">
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class ="row">
+          {% for movie in rec_movies2 %}
+          <div class="col-md-3">
+            <a href="{% url 'movies:detail' movie.id %}">
+              <img src="{{ movie.poster_path }}" class="d-block w-100 h-100" alt="poster">
+            </a>
+          </div>
+        {% endfor%}
+        </div>
+      </div>
+
+
+    </div>
+
+
+
+
+    <a class="carousel-control-prev" href="#r_carouselExampleFade" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#r_carouselExampleFade" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+

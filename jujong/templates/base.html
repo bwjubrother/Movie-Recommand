@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JuJong Cinema</title>
+  <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Gugi&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <style>
+      body {
+      background: url("/static/images/Background.jpg") no-repeat fixed;
+      background-size: 100% 100%;
+    }
+
+  </style>
+</head>
+<body>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark  px-5" style="font-family: 'Gamja Flower', cursive; font-size: 28px; padding: 0px;">
+        <a class="navbar-brand" href="{% url 'movies:main' %}">
+            <i class="text-info fas fa-film">JuJong Cinema</i> 
+        </a>
+        <p class="text-light mb-0">사회적 거리 두기, 영화와 가까이 하기</p>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+                <form class="form-inline my-2 my-lg-0" action="{% url 'movies:search_result' %}" method="GET">
+                    {% csrf_token %}
+                    <div class="input-group mx-3">
+                        <input type="text" class="form-control mr-sm-2" name='q' type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+                    </div>
+                </form>
+                {% if user.is_authenticated %}
+                    {% if request.user.is_superuser %}
+                        <li class="nav-item">
+                            <a class="nav-link text-white mx-3" href="{% url 'movies:movie_create' %}">NEW</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'movies:profile' %}">{{user}}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:logout' %}">Log-out</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:signup' %}">Sign up</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:login' %}">Sign in</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    
+
+    {% block content %}
+    {% endblock %}
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</body>
+</html>

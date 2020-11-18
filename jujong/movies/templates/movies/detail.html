@@ -1,0 +1,112 @@
+{% extends 'base.html'%}
+{% load bootstrap4 %}
+{% block content %}
+    <div class="container text-white" style="font-family: 'Gamja Flower', cursive;">
+        <!-- 배경 이미지 -->
+        <div class="fontchange">
+            <div class="col-12 p-0">
+            <img src="{{ movie.backdrop_path }}" style="width:100%; height:500px; opacity:0.8"   />
+            </div>
+        <!--영화 제목-->
+        <div class="pt-1">
+            <span style="font-size:45px"><b>{{ movie.title }}</b></span> | 
+            <span style="font-size:25px"><b>{{ movie.tagline }}</b></span> |
+        </div>
+        <hr>
+        <!--영화 정보-->
+        <div class="row" style="background-color: black;">
+            <!--영화 이미지-->
+            <div class="col-md-4 d-flex my-3">
+                <img src="{{movie.poster_path}}"  style="width:100%; height:100%" />
+            </div>
+            <!--영화 정보-->
+            <div class="col-md-8 d-flex my-5">
+                <div style="font-size: 22px;">
+                    <h4 class="mr-3">장르: {{ movie.genres }}</h4>
+                    {% if movie.director %}
+                        <h4 class="mr-3">감독: {{ movie.director }}</h4>
+                    {% else %}
+                    {% endif %}
+                    <h4 class="mr-3">출연진: {{ movie.casts }}</h4>
+                    <h4 class="mr-3">개봉일: {{ movie.release_date }}</h4>
+                    <h4 class="mr-3">평점: {{ movie.vote_average }}</h4>
+                    <h4 class="mr-3">인기도: {{ movie.popularity }}</h4>
+                    <hr>
+                    <h5 class="mr-3">줄거리</h5>
+                    <p> {{ movie.overview }}</p>
+                    
+
+                    {% if user.is_superuser %}
+                        <a href="{% url 'movies:movie_update' movie.pk %}">글 수정</a>
+                        <a href="{% url 'movies:movie_delete' movie.pk %}">글 삭제</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="embed-responsive embed-responsive-16by9">
+            <iframe class="embed-responsive-item" type="text/html" src="{{ video }}" frameborder="0"></iframe>
+        </div>
+        <!-- 평점 -->
+            {% if movie.score_set.all.count %}
+                <h3>이 영화에 대한 평점은 {{ ratingAvg }}점 입니다.</h3>
+                <h3>지금까지 이 영화에 {{movie.score_set.all.count}}분이 평가를 해주셨어요! &nbsp; </h3>
+            {% else %}
+                <h3>이 영화에 대한 별점이 없어요. 처음으로 평가를 남겨보세요! &nbsp; </h3>
+            {% endif %}
+            {% if user.is_authenticated %}
+                {% for score in movie.score_set.all %}
+                    {% if score.user == request.user %}
+                        <h4><b>{{score.user.username}}</b>님의 별점 {{score.rating}}점</h4>
+                    {% endif %}
+                {% endfor %}
+                <!--별점 입력-->
+                <form action="{% url 'movies:scoreCreate' movie.id %}" method="POST">
+                    {% csrf_token %}
+                    <select name="rating" id="rating">
+                        <option value="1">★☆☆☆☆</option>
+                        <option value="2">★★☆☆☆</option>
+                        <option value="3">★★★☆☆</option>
+                        <option value="4">★★★★☆</option>
+                        <option value="5">★★★★★</option>
+                    </select>
+                    <input type="submit" value="별점주기" class="btn btn-secondary btn-sm">
+                </form>
+            {% endif %}
+    
+        <hr>
+        <!-- 댓글 -->
+        {% if reviews %}
+            <p style="font-size: 20px;">지금까지 이 영화에 {{movie.review_set.all.count}}개의 Review가 있어요!</p>
+        {% else %}
+            <p style="font-size: 20px;">이 영화에 대한 댓글이 없어요. 한줄평을 써보는건 어떠신가요?</p>
+        {% endif %}
+        <div>
+            <table class="table table-hover mt-3">
+              <thead class="thead-dark">
+                <tr style="font-size: 25px;">
+                  <th scope="col" width='10%'>#</th>
+                  <th scope="col" width='30%'>TITLE</th>
+                  <th scope="col" width='30%'>CONTENT</th>
+                  <th scope="col" width='10%'>RANK</th>
+                  <th scope="col" width='20%'>CREATED_TIME</th>
+                </tr>
+              </thead>
+              <tbody class ="text-white" style="font-size: 20px;">
+                {% for review in reviews %}
+                    <tr>
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td><a href="{% url 'movies:review_detail' movie.pk review.pk %}" class="text-reset">{{ review.title }}</a></td>
+                      <td>{{ review.content|truncatewords:3 }}</td>
+                      <td>{{ review.rank }}</td>
+                      <td>{{ review.created_at }}</td>
+                    </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            {% if user.is_authenticated %}
+                <a href="{% url 'movies:review_create' movie.pk %}" style="font-size: 25px;">리뷰 작성</a>
+            {% endif %}
+        </div>
+    </div>    
+{% endblock %}

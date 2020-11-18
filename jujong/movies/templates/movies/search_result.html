@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block content %}
+  <div class="my-3">
+    <h2><b>{{ query }}</b>에 대한 검색 결과입니다.</h2>
+  </div>
+  <div class="row">
+    {% for movie in movies %}
+      <div class="card col-3">
+        <a href="{% url 'movies:detail' movie.pk %}"><img class="card-img-top" src="{{ movie.backdrop_path }}" alt=""></a>
+        <div class="card-body">
+          <h5 class="card-title">{{ movie.title }}</h5>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

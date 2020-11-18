@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block content %}
+<div class="container text-white" style="font-family: 'Gamja Flower', cursive; font-size: 22px;">
+    <div class="fontchage d-flex justify-content-center"> 
+        <form action="" method="post" style="height:570px" class="mt-5 col-6">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <input type="submit" value="Enter" class="btn btn-secondary">
+        </form>
+    </div>
+</div>
+{% endblock %}
